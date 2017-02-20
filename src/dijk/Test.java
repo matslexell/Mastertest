@@ -3,25 +3,51 @@ package dijk;
 import java.util.LinkedList;
 import java.util.List;
 
+import dijk.Node.State;
+
 public class Test {
 	public List<Node> findWay(Graph graph, String fromName, String toName){
 		graph.setAllToUnvisited();
 		
-		LinkedList<Node> queue = new LinkedList<>();
+		LinkedList<Path> queue = new LinkedList<>();
 		Node from = graph.get(fromName);
-
+		Node to = graph.get(toName);
 		
-		queue.add(from);
+		
+		queue.add(new Path(from));
 		while(!queue.isEmpty()){
-			Node r = queue.poll();
+			Path r = queue.poll();
 			
-			for (Edge graphWeightedEdge : r) {
+			r.node.setState(State.Visited);
+			for (Edge edge : r.node) {
+				if(edge.node.getState() == State.Visited){
+					continue;
+				}
+				Path path = new Path(r, edge.node);
+				queue.add(path);
+				if(edge.node == to){
+					System.out.println("Found! " + path.path);
+				}
 				
-				queue.add(graphWeightedEdge.getNode());
 			}
 		}
 			
 		return null;
+		
+	}
+	
+	public class Path {
+		Node node;
+		String path;
+		public Path(Node node){
+			this.path = node.getName();
+			this.node = node;
+		}
+		
+		public Path(Path path, Node node){
+			this.path = path.path + "->" + node.getName();
+			this.node = node;
+		}
 		
 	}
 	
@@ -65,6 +91,7 @@ public class Test {
 	
 public static void main(String[] args) {
 	Graph g =  getTestGraph1();
+	new Test().findWay(g, "b", "f");
 		
 	System.out.println(g.toString());
 

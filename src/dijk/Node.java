@@ -52,6 +52,10 @@ public class Node implements Iterable<Edge>{
 		return name + str.toString();
 	}
 	
+	public String getName(){
+		return name;
+	}
+	
 	@Override
 	public Iterator<Edge> iterator() {
 		return neigbours.iterator();
