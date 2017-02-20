@@ -15,4 +15,8 @@ public class Edge {
 	public int getWeight(){
 		return weight;
 	}
+	
+	public String toString(){
+		return node.getName();
+	}
 }
