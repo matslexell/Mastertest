@@ -8,7 +8,7 @@ import java.util.Map;
 import dijk.Node.State;
 
 public class Test {
-	public List<Node> findWay(Graph graph, String fromName, String toName) {
+	public Path findWay(Graph graph, String fromName, String toName) {
 		graph.setAllToUnvisited();
 
 		LinkedList<Path> queue = new LinkedList<>();
@@ -36,14 +36,10 @@ public class Test {
 
 				Path path = new Path(r, edge.node, edge.weight);
 				queue.add(path);
-				if (edge.node == to) {
-					System.out.println("Found! " + path + ", "
-							+ path.getWeightToStart());
-				}
 			}
 		}
 
-		return null;
+		return visited.get(to);
 
 	}
 
@@ -120,9 +116,9 @@ public class Test {
 
 	public static void main(String[] args) {
 		Graph g = getTestGraph1();
-		new Test().findWay(g, "b", "f");
-
-		System.out.println(g.toString());
+		Path p = new Test().findWay(g, "b", "f");
+		
+		System.out.println(p.toString());
 
 	}
 }
