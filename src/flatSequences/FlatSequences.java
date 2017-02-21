@@ -29,8 +29,6 @@ public class Flatsequences {
 		}
 		
 		public boolean eq(int k, int s){
-
-
 			double eq = (seq[k-1] - seq[s-1]) / (k-s);
 			double round = Math.round(eq * 1000000) * 1.0 / 1000000;
 			
@@ -39,14 +37,12 @@ public class Flatsequences {
 		
 		public void findLargestFl(){
 			int idx = seq.length;
-			int length = fl(idx);
 			
-			int max = length;
-			int maxIdx = idx;
+			int max = -1;
+			int maxIdx = -1;
 			
-			idx = idx - length;
 			while(idx>0){
-				length = fl(idx);
+				int length = fl(idx);
 				if(length>max){
 					maxIdx = idx;
 					max = length;
@@ -54,15 +50,12 @@ public class Flatsequences {
 				idx = idx - length;
 			}
 			
-			
 			System.out.println("Max:    " + max);
 			System.out.println("MaxIdx: " + maxIdx);
-
 		}
 
 		public static void main(String[] args) {
 			double[] seq = {1.9,2.8,3.7,4.6,5.6,6.5,7.4,8.3,9.2,10.2,11.1};
 			new Flatsequences(seq).findLargestFl();
-			
 		}
 }
