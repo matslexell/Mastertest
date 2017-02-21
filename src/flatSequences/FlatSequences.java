@@ -36,11 +36,33 @@ public class Flatsequences {
 			
 			return 0 < round && round < 1;
 		}
+		
+		public void findLargestFl(){
+			int idx = seq.length;
+			int length = fl(idx);
+			
+			int max = length;
+			int maxIdx = idx;
+			
+			idx = idx - length;
+			while(idx>0){
+				length = fl(idx);
+				if(length>max){
+					maxIdx = idx;
+					max = length;
+				}
+				idx = idx - length;
+			}
+			
+			
+			System.out.println("Max:    " + max);
+			System.out.println("MaxIdx: " + maxIdx);
+
+		}
 
 		public static void main(String[] args) {
-			double[] seq = {1.9,2.8,3.7,4.6,5.6,6.5,7.4};
-			
-			System.out.println(new Flatsequences(seq).fl(7));
+			double[] seq = {1.9,2.8,3.7,4.6,5.6,6.5,7.4,8.3};
+			new Flatsequences(seq).findLargestFl();
 			
 		}
 }
