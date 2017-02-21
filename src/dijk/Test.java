@@ -8,45 +8,65 @@ import java.util.Map;
 import dijk.Node.State;
 
 public class Test {
-	public Path findWay(Graph graph, String fromName, String toName) {
+	public Path dijkstras(Graph graph, String fromName, String toName) {
 		graph.setAllToUnvisited();
 
-		LinkedList<Path> queue = new LinkedList<>();
 		Map<Node, Path> visited = new HashMap<>();
+
+		LinkedList<Path> queue = new LinkedList<>();
+
+		int shortestPathToFin = Integer.MAX_VALUE;
+
+		// Goals
 		Node from = graph.get(fromName);
-		Node to = graph.get(toName);
+		Node fin = graph.get(toName);
 
 		queue.add(new Path(from));
 
 		while (!queue.isEmpty()) {
-			Path r = queue.poll();
+			Path pathCurrent = queue.poll();
+			// Visit node
+			pathCurrent.node.setState(State.Visited);
+			visited.put(pathCurrent.node, pathCurrent);
 
-			r.node.setState(State.Visited);
-			visited.put(r.node, r);
-			for (Edge edge : r.node) {
-				if (edge.node.getState() == State.Visited) {
-					Path path = visited.get(edge.node);
-					int w1 = r.getWeightToStart() + edge.weight;
-					int w2 = path.getWeightToStart();
-					if (w1 < w2) {
-						path.path = r;
+			// Go through all neighbors
+			for (Edge edge : pathCurrent.node) {
+				Path pathNew = new Path(pathCurrent, edge.node, edge.weight);
+
+				// If the new total path has exceeded the shortest path to
+				// finish, no need to keep looking
+				if (pathNew.getWeightToStart() > shortestPathToFin) {
+					continue;
+				}
+
+				// If neighbor is already visited, check if current path was
+				// quicker
+				if (pathNew.node.getState() == State.Visited) {
+					Path pathOfVisited = visited.get(pathNew.node);
+					if (pathNew.getWeightToStart() < pathOfVisited
+							.getWeightToStart()) {
+						pathOfVisited.path = pathCurrent;
 					}
 					continue;
 				}
 
-				Path path = new Path(r, edge.node, edge.weight);
-				queue.add(path);
+				if (pathNew.node == fin) {
+					shortestPathToFin = Math.min(pathNew.getWeightToStart(),
+							shortestPathToFin);
+				}
+
+				queue.add(pathNew);
 			}
 		}
 
-		return visited.get(to);
+		return visited.get(fin);
 
 	}
 
 	public class Path {
 		Node node;
 		Path path;
-		int weight;
+		int edgeWeight;
 
 		public Path(Node node) {
 			this.path = null;
@@ -56,7 +76,7 @@ public class Test {
 		public Path(Path path, Node node, int weight) {
 			this.path = path;
 			this.node = node;
-			this.weight = weight;
+			this.edgeWeight = weight;
 		}
 
 		public int getWeightToStart() {
@@ -64,7 +84,7 @@ public class Test {
 				return 0;
 			}
 
-			return path.getWeightToStart() + weight;
+			return path.getWeightToStart() + edgeWeight;
 		}
 
 		public String toString() {
@@ -116,8 +136,8 @@ public class Test {
 
 	public static void main(String[] args) {
 		Graph g = getTestGraph1();
-		Path p = new Test().findWay(g, "b", "f");
-		
+		Path p = new Test().dijkstras(g, "b", "f");
+
 		System.out.println(p.toString());
 
 	}
