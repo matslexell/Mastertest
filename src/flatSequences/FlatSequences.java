@@ -61,7 +61,7 @@ public class Flatsequences {
 		}
 
 		public static void main(String[] args) {
-			double[] seq = {1.9,2.8,3.7,4.6,5.6,6.5,7.4,8.3};
+			double[] seq = {1.9,2.8,3.7,4.6,5.6,6.5,7.4,8.3,9.2,10.2,11.1};
 			new Flatsequences(seq).findLargestFl();
 			
 		}
